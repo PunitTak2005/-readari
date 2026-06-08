@@ -26,3 +26,4 @@ View your app in AI Studio: https://ai.studio/apps/ffed0ecd-8a43-4959-84d6-89424
 
 Or start both together from one terminal:
 - `npm run start`
+# Readari
