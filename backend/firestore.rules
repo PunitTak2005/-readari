@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net - Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // -- Global Helper Functions --
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // -- Entity Validation Helpers --
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['displayName', 'createdAt', 'updatedAt'])
+        && data.keys().size() == 3
+        && data.displayName is string
+        && data.displayName.size() > 0
+        && data.displayName.size() <= 100;
+    }
+
+    function isValidBook(data) {
+      return data.keys().hasAll(['title', 'author', 'status', 'rating', 'currentPage', 'totalPages', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['title', 'author', 'status', 'rating', 'currentPage', 'totalPages', 'createdAt', 'updatedAt', 'review', 'notes', 'coverImage', 'currentChapter'])
+        && data.title is string
+        && data.title.size() > 0
+        && data.title.size() <= 300
+        && data.author is string
+        && data.author.size() > 0
+        && data.author.size() <= 300
+        && (data.status == 'want-to-read' || data.status == 'reading' || data.status == 'completed')
+        && data.rating is int
+        && data.rating >= 0
+        && data.rating <= 5
+        && data.currentPage is int
+        && data.currentPage >= 0
+        && data.totalPages is int
+        && data.totalPages >= 0
+        && (!data.keys().hasAny(['review']) || (data.review is string && data.review.size() <= 10000))
+        && (!data.keys().hasAny(['notes']) || (data.notes is string && data.notes.size() <= 10000))
+        && (!data.keys().hasAny(['coverImage']) || (data.coverImage is string && data.coverImage.size() <= 1000000))
+        && (!data.keys().hasAny(['currentChapter']) || (data.currentChapter is string && data.currentChapter.size() <= 200));
+    }
+
+    // -- Collection Matches --
+
+    // UserProfile collection
+    match /users/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+      
+      allow create: if isSignedIn() 
+        && request.auth.uid == userId
+        && isValidId(userId)
+        && isValidUserProfile(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+        
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidId(userId)
+        && isValidUserProfile(incoming())
+        && incoming().updatedAt == request.time
+        && incoming().createdAt == existing().createdAt;
+    }
+
+    // Book collection
+    match /users/{userId}/books/{bookId} {
+      allow read, delete: if isSignedIn() && request.auth.uid == userId;
+      
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidId(userId)
+        && isValidId(bookId)
+        && isValidBook(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+        
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidId(userId)
+        && isValidId(bookId)
+        && isValidBook(incoming())
+        && incoming().updatedAt == request.time
+        && incoming().createdAt == existing().createdAt;
+    }
+  }
+}

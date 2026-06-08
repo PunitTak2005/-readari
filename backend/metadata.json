@@ -1,0 +1,6 @@
+{
+  "name": "Readari",
+  "description": "Your private shelf and reading log with cross-device sync, offline-first localStorage backup, rating systems, progress bars, and memorable quote notebooks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

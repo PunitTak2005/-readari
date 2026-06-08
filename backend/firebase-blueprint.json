@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User public information and settings",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The displayed name of the user"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["displayName", "createdAt", "updatedAt"]
+    },
+    "Book": {
+      "title": "Book",
+      "description": "A book tracked by the user, including status, progress, rating, and review",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the book"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author of the book"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["want-to-read", "reading", "completed"],
+          "description": "Current status of reading"
+        },
+        "rating": {
+          "type": "integer",
+          "description": "Rating out of 5 stars (0 if unrated)"
+        },
+        "review": {
+          "type": "string",
+          "description": "Optional book review or thoughts"
+        },
+        "currentPage": {
+          "type": "integer",
+          "description": "Current page number read so far"
+        },
+        "totalPages": {
+          "type": "integer",
+          "description": "Total number of pages in the book"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional notes/quotes from the book"
+        },
+        "coverImage": {
+          "type": "string",
+          "description": "Optional base64 encoded cover image data URL"
+        },
+        "currentChapter": {
+          "type": "string",
+          "description": "Optional current chapter title or number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["title", "author", "status", "rating", "currentPage", "totalPages", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of user user profile details"
+    },
+    "/users/{userId}/books/{bookId}": {
+      "schema": "Book",
+      "description": "Collection of books tracked by a user"
+    }
+  }
+}
