@@ -21,7 +21,6 @@ It helps you keep track of what you read, along with notes and metadata, powered
 
 - **Frontend:** React, Vite, TypeScript (inside `frontend/`) [page:55]  
 - **Backend:** Node/Express (inside `backend/`)  
-- **AI:** Google Gemini API (via `GEMINI_API_KEY`) [page:55]  
 - **Version Control:** Git + GitHub  
 
 ---
@@ -48,11 +47,6 @@ Key config file:
 ---
 
 ## Getting Started (Local)
-
-### Prerequisites
-
-- Node.js (LTS recommended)  
-- A Google Gemini API key from Google AI Studio [page:55][web:64]  
 
 ### 1. Clone the repository
 
