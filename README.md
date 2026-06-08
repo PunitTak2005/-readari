@@ -61,25 +61,7 @@ git clone https://github.com/PunitTak2005/-readari.git
 cd -readari
 ```
 
-### 2. Set up environment variables
-
-Use the example file as a reference:
-
-```bash
-cd frontend
-cp .env.example .env.local
-```
-
-Open `.env.local` and fill in:
-
-```env
-GEMINI_API_KEY="YOUR_GEMINI_API_KEY_HERE"
-APP_URL="http://localhost:5173"  # or whatever your dev URL is
-```
-
-Never commit `.env.local` to Git.
-
-### 3. Install dependencies
+### 2. Install dependencies
 
 From the repo root:
 
@@ -122,10 +104,6 @@ You can deploy the **frontend** for free using:
 - **Vercel** – import this repo, set `frontend/` as the root, build with `npm run build`, output `dist` [web:62][web:65].  
 - **Netlify** – similar setup with `frontend` as the publish directory [web:62].  
 
-Set these environment variables in the hosting dashboard:
-
-- `GEMINI_API_KEY` – your Gemini key from Google AI Studio [web:64].  
-- `APP_URL` – the deployed frontend URL (e.g. `https://readari.vercel.app`).  
 
 For the backend, you can use:
 
