@@ -3,7 +3,7 @@
 Readari is a minimalist archive for private book records.  
 It helps you keep track of what you read, along with notes and metadata, powered by the Gemini API for smart text handling and suggestions.  
 
-> Originally scaffolded from a Google AI Studio app template and adapted for a custom reading log workflow.  
+
 
 ---
 
